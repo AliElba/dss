@@ -1,0 +1,14 @@
+package.json
+package-lock.json
+dist
+.vscode/*
+Dockerfile
+README.md
+*.html
+karma.conf.js
+commitlint.config.js
+.angular/*
+manifests/*
+trivy-reports/*
+
+src/app/@shared/types/*
