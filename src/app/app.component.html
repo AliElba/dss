@@ -42,7 +42,8 @@
 </div>
 
 <div *ngIf="bestOptions().length > 0" [ngStyle]="{ margin: '0 24px' }">
-  <h3>Best structural systems dimension,weight and power calculations: </h3>
+  <h3>Best structural systems dimension, weight and power calculations ({{ bestOptions().length }} Options
+    available): </h3>
   <table mat-table [dataSource]="bestOptions()">
     <ng-container matColumnDef="system">
       <th mat-header-cell *matHeaderCellDef>System No.</th>
