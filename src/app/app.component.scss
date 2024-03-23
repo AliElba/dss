@@ -1,9 +1,36 @@
 .mat-column-quantity,
 .mat-column-dimension,
 .mat-column-energy_remaining {
-  color: green;
+  color: darkblue;
+}
+
+.mat-column-energy {
+  border-right: 2px solid #ccc;
 }
 
 mat-form-field {
   margin-right: 16px;
+}
+
+.header {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+/* CSS for the banner */
+.top-banner {
+  width: 100%;
+  height: 200px;
+  //background-image: url('your-image-url.jpg'); /* Replace 'your-image-url.jpg' with your image URL */
+  background-color: #9575cd;
+  background-size: cover; /* Cover the entire area */
+  background-position: center; /* Center the background image */
+  padding: 20px;
+  box-sizing: border-box; /* Include padding in the width */
+  text-align: center; /* Center text horizontally */
+  color: white; /* Text color */
+
+  display: flex; /* Use flexbox to center vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content vertically */
 }
