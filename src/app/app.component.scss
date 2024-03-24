@@ -1,6 +1,6 @@
 .mat-column-quantity,
-.mat-column-dimension,
-.mat-column-energy_remaining {
+.mat-column-difference_area,
+.mat-column-difference_energy {
   color: darkblue;
 }
 
@@ -17,6 +17,18 @@ mat-form-field {
   font-weight: bold;
 }
 
+.sub-header {
+  justify-content: start;
+}
+
+.input-form {
+  margin: 16px;
+}
+
+.extra-actions {
+  margin: 16px;
+}
+
 /* CSS for the banner */
 .top-banner {
   width: 100%;
@@ -31,6 +43,6 @@ mat-form-field {
   color: white; /* Text color */
 
   display: flex; /* Use flexbox to center vertically */
-  justify-content: center; /* Center content vertically */
+  justify-content: center; /* Center content horizontal */
   align-items: center; /* Center content vertically */
 }
