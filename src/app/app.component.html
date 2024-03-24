@@ -1,17 +1,21 @@
 <div class="top-banner">
-  <h1 class="header">
-    <p>DSS for Selecting the Optimum Structure System</p>
-    <p>of Solar Energy based on Value Engineering Concept</p>
-  </h1>
+  <div>
+    <h1 class="header">Decision Support System</h1>
+    <h2 class="sub-header">
+      Selecting the Optimum Structure System <br>
+      of Solar Energy based on Value Engineering Concept
+    </h2>
+  </div>
 </div>
-<div [ngStyle]="{ margin: '24px' }">
+
+<div class="input-form">
   <mat-form-field>
     <mat-label>Dimension (m^2)</mat-label>
-    <input matInput type="number" placeholder="Dimension (m^2)" [(ngModel)]="dimension_m2_needed">
+    <input matInput type="number" placeholder="Dimension (m^2)" [(ngModel)]="needed_area_m2">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Energy (kWh)</mat-label>
-    <input matInput type="number" placeholder="Energy (kWh)" [(ngModel)]="energy_needed">
+    <input matInput type="number" placeholder="Energy (kWh)" [(ngModel)]="needed_energy">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Number of Options</mat-label>
@@ -20,18 +24,18 @@
 
   <button mat-raised-button
           color="primary"
-          [ngStyle]="{ margin: ' 0 24px' }"
-          [disabled]="!dimension_m2_needed && !energy_needed"
+          [disabled]="!needed_area_m2 && !needed_energy"
           (click)="onFindBestOptions()">Find Best Options
   </button>
 
-  <mat-checkbox [(ngModel)]="exactMatch" [ngStyle]="{ margin: '0 16px' }">Exact Match</mat-checkbox>
+  <mat-checkbox [(ngModel)]="exactMatch">Exact Match</mat-checkbox>
+</div>
 
-  <br>
+<div class="extra-actions">
   <button mat-raised-button
           color="accent"
           *ngIf="bestOptions().length > 0"
-          (click)="sortBestOptions('dimension')">Best Dimension
+          (click)="sortBestOptions('area')">Best Dimension
   </button>
   <button mat-raised-button
           color="accent"
@@ -42,8 +46,8 @@
 </div>
 
 <div *ngIf="bestOptions().length > 0" [ngStyle]="{ margin: '0 24px' }">
-  <h3>Best structural systems dimension, weight and power calculations ({{ bestOptions().length }} Options
-    available): </h3>
+  <h3>Best structural systems dimension, weight and power calculations
+    ( <b>{{ bestOptions().length }}</b> Options available): </h3>
   <table mat-table [dataSource]="bestOptions()">
     <ng-container matColumnDef="system">
       <th mat-header-cell *matHeaderCellDef>System No.</th>
@@ -69,9 +73,9 @@
       <th mat-header-cell *matHeaderCellDef>Dimension Y</th>
       <td mat-cell *matCellDef="let element">{{ element.option.dimension_y }}</td>
     </ng-container>
-    <ng-container matColumnDef="dimension_m2">
+    <ng-container matColumnDef="area_m2">
       <th mat-header-cell *matHeaderCellDef>Area (m^2)</th>
-      <td mat-cell *matCellDef="let element">{{ element.option.dimension_m2 }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.option.area_m2 }}</td>
     </ng-container>
     <ng-container matColumnDef="weight">
       <th mat-header-cell *matHeaderCellDef>Weight (Kg)</th>
@@ -89,18 +93,16 @@
       <th mat-header-cell *matHeaderCellDef>Quantity</th>
       <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
     </ng-container>
-    <ng-container matColumnDef="dimension">
+    <ng-container matColumnDef="difference_area">
       <th mat-header-cell *matHeaderCellDef>Remaining Area (m^2)</th>
-      <td mat-cell *matCellDef="let element">{{ element.difference_dimension }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.difference_area }}</td>
     </ng-container>
-    <ng-container matColumnDef="energy_remaining">
+    <ng-container matColumnDef="difference_energy">
       <th mat-header-cell *matHeaderCellDef>Remaining Energy (kWh)</th>
       <td mat-cell *matCellDef="let element">{{ element.difference_energy }}</td>
     </ng-container>
-    <tr mat-header-row
-        *matHeaderRowDef="['system', 'id_main', 'id_sub','span', 'dimension_x', 'dimension_y', 'dimension_m2','weight' , 'no_solar_panel', 'energy', 'quantity', 'dimension', 'energy_remaining']"></tr>
-    <tr mat-row
-        *matRowDef="let row; columns: ['system', 'id_main', 'id_sub','span', 'dimension_x', 'dimension_y', 'dimension_m2','weight', 'no_solar_panel', 'energy', 'quantity', 'dimension', 'energy_remaining'];"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
 
