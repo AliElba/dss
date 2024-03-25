@@ -18,8 +18,8 @@
     <input matInput type="number" placeholder="Energy (kWh)" [(ngModel)]="needed_energy">
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Number of Options</mat-label>
-    <input matInput type="number" placeholder="Number of Options" [(ngModel)]="numOptions">
+    <mat-label>Number of Alternatives</mat-label>
+    <input matInput type="number" placeholder="Number of Alternatives" [(ngModel)]="numOfAlternatives">
   </mat-form-field>
 
   <button mat-raised-button
@@ -34,21 +34,22 @@
 <div class="extra-actions">
   <button mat-raised-button
           color="accent"
-          *ngIf="bestOptions().length > 0"
+          *ngIf="dataSource.data.length > 0"
           (click)="sortBestOptions('area')">Sort by best Area
   </button>
   <button mat-raised-button
           color="accent"
-          *ngIf="bestOptions().length > 0"
+          *ngIf="dataSource.data.length > 0"
           [ngStyle]="{ margin: '0 24px' }"
           (click)="sortBestOptions('energy')">Sort by best Energy
   </button>
 </div>
 
-<div *ngIf="bestOptions().length > 0" [ngStyle]="{ margin: '0 24px' }">
+<div [ngStyle]="{ margin: '0 24px' }">
   <h3>Best structural systems dimension, weight and power calculations
-    ( <b>{{ bestOptions().length }}</b> Options available): </h3>
-  <table mat-table [dataSource]="bestOptions()">
+    ( <b>{{ dataSource.data.length }}</b> Options available): </h3>
+
+  <table mat-table matSort [dataSource]="dataSource">
     <ng-container matColumnDef="system">
       <th mat-header-cell *matHeaderCellDef>System No.</th>
       <td mat-cell *matCellDef="let element">{{ element.option.system }}</td>
@@ -74,31 +75,31 @@
       <td mat-cell *matCellDef="let element">{{ element.option.dimension_y }}</td>
     </ng-container>
     <ng-container matColumnDef="area_m2">
-      <th mat-header-cell *matHeaderCellDef>Area (m^2)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Area (m^2)</th>
       <td mat-cell *matCellDef="let element">{{ element.option.area_m2 }}</td>
     </ng-container>
     <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef>Weight (Kg)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Weight (Kg)</th>
       <td mat-cell *matCellDef="let element">{{ element.option.weight }}</td>
     </ng-container>
     <ng-container matColumnDef="no_solar_panel">
-      <th mat-header-cell *matHeaderCellDef>No. of Solar Panels</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>No. of Solar Panels</th>
       <td mat-cell *matCellDef="let element">{{ element.option.no_solar_panel }}</td>
     </ng-container>
     <ng-container matColumnDef="energy">
-      <th mat-header-cell *matHeaderCellDef>Total Energy (kWh)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Energy (kWh)</th>
       <td mat-cell *matCellDef="let element">{{ element.option.energy }}</td>
     </ng-container>
     <ng-container matColumnDef="quantity">
-      <th mat-header-cell *matHeaderCellDef>Quantity</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Qty. Structure System</th>
       <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
     </ng-container>
     <ng-container matColumnDef="difference_area">
-      <th mat-header-cell *matHeaderCellDef>Remaining Area (m^2)</th>
-      <td mat-cell *matCellDef="let element">{{ element.difference_area }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Area difference (m^2)</th>
+      <td mat-cell *matCellDef="let element">{{ element.Difference_area }}</td>
     </ng-container>
     <ng-container matColumnDef="difference_energy">
-      <th mat-header-cell *matHeaderCellDef>Remaining Energy (kWh)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Energy Difference (kWh)</th>
       <td mat-cell *matCellDef="let element">{{ element.difference_energy }}</td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -106,6 +107,6 @@
   </table>
 </div>
 
-<div *ngIf="bestOptions().length === 0" [ngStyle]="{ margin: '24px' }">
+<div *ngIf="dataSource.data.length === 0" [ngStyle]="{ margin: '24px' }">
   No options found.
 </div>
