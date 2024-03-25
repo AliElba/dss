@@ -10,8 +10,8 @@
 
 <div class="input-form">
   <mat-form-field>
-    <mat-label>Dimension (m^2)</mat-label>
-    <input matInput type="number" placeholder="Dimension (m^2)" [(ngModel)]="needed_area_m2">
+    <mat-label>Area (m^2)</mat-label>
+    <input matInput type="number" placeholder="Area (m^2)" [(ngModel)]="needed_area_m2">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Energy (kWh)</mat-label>
@@ -35,13 +35,13 @@
   <button mat-raised-button
           color="accent"
           *ngIf="bestOptions().length > 0"
-          (click)="sortBestOptions('area')">Best Dimension
+          (click)="sortBestOptions('area')">Sort by best Area
   </button>
   <button mat-raised-button
           color="accent"
           *ngIf="bestOptions().length > 0"
           [ngStyle]="{ margin: '0 24px' }"
-          (click)="sortBestOptions('energy')">Best Energy
+          (click)="sortBestOptions('energy')">Sort by best Energy
   </button>
 </div>
 
