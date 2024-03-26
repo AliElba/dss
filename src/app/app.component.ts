@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -21,7 +21,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 export class AppComponent implements AfterViewInit {
   bestOptionService = inject(BestOptionService);
 
-  @ViewChild(MatSort) matSort!: MatSort;
+  @ViewChild(MatSort, { static: true }) matSort!: MatSort;
   dataSource = new MatTableDataSource(new Array<BestOption>());
 
   displayedColumns: Array<keyof Option | keyof BestOption> = [
@@ -39,10 +39,9 @@ export class AppComponent implements AfterViewInit {
     'difference_area',
     'difference_energy',
   ];
-  exactMatch = signal<boolean>(true);
   needed_area_m2?: number;
-  needed_energy?: number = 5000;
-  numOfAlternatives = 10;
+  needed_energy?: number;
+  numOfAlternatives = 3;
 
   ngAfterViewInit() {
     this.dataSource.sort = this.matSort;
@@ -70,7 +69,6 @@ export class AppComponent implements AfterViewInit {
     this.dataSource.data = this.bestOptionService.findBestOptions(
       [...DATA_SOURCE],
       this.numOfAlternatives,
-      this.exactMatch(),
       this.needed_area_m2,
       this.needed_energy
     );
@@ -80,23 +78,35 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
-  sortBestOptions(priority: Priority) {
+  clearSort() {
+    this.matSort.sort({ id: '', start: 'asc', disableClear: false });
+  }
+
+  sortByHighestEnergyLessWeight(priority: Priority = 'energy') {
+    this.clearSort();
+
     this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
-      if (priority === 'energy') {
-        /**
-         * Convert an array containing both positive and negative numbers to an array
-         * where all values are positive,
-         * use the Math.abs() which returns the absolute value of a number,
-         */
-        return Math.abs(a.difference_energy) - Math.abs(b.difference_energy);
-      }
+      if (priority === 'weight') {
+        // First, sort by less weight (ascending order)
+        if (a.option.weight !== b.option.weight) {
+          return a.option.weight - b.option.weight;
+        }
 
-      if (priority === 'area') {
-        return Math.abs(a.difference_area) - Math.abs(b.difference_area);
-      }
+        if (!a.difference_energy || !b.difference_energy) {
+          return 0;
+        }
 
-      // Default sorting behavior if the priority is not recognized
-      return 0;
+        // If weight differences are equal, sort by highest energy (ascending order)
+        return b.difference_energy - a.difference_energy;
+      } else {
+        // First, sort by highest energy (ascending order)
+        if (!!a.difference_energy && !!b.difference_energy && a.difference_energy !== b.difference_energy) {
+          return b.difference_energy - a.difference_energy;
+        }
+
+        // If energy differences are equal, sort by less weight (ascending order)
+        return a.option.weight - b.option.weight;
+      }
     });
   }
 }

@@ -18,27 +18,69 @@ describe('BestOptionService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should find best options when only needed_energy is provided', () => {
-    const bestOptions = service.findBestOptions(DATA_SOURCE, 1, true, undefined, 1100);
-    expect(bestOptions.length).toBe(1);
-    expect(bestOptions[0].option.id_sub).toBe('A1.1');
-    expect(bestOptions[0].difference_area).toBe(-6);
-    expect(bestOptions[0].difference_energy).toBe(17);
+  describe('Filter by AREA', () => {
+    it('should find best options with EXACT or LESS', () => {
+      const needed_area_m2 = [12, 11, 20, 30, 40, 5, 18, 100, 40];
+      const needed_energy = undefined;
+
+      needed_area_m2.forEach((_needed_area_m2) => {
+        const bestOptions = service.findBestOptions(DATA_SOURCE, 30, _needed_area_m2, needed_energy);
+        bestOptions.forEach((x) => expect(x.difference_area).toBeLessThanOrEqual(0));
+      });
+    });
+
+    it('should NOT find any options with more than required area', () => {
+      const needed_area_m2 = [12, 11, 20, 30, 40, 5, 18, 100, 40];
+      const needed_energy = undefined;
+
+      needed_area_m2.forEach((_needed_area_m2) => {
+        const bestOptions = service.findBestOptions(DATA_SOURCE, 30, _needed_area_m2, needed_energy);
+        expect(bestOptions.some((x) => x.difference_area! > 0)).toBeFalsy();
+      });
+    });
   });
 
-  it('should find best options when only needed_area_m2 is provided', () => {
-    const bestOptions = service.findBestOptions(DATA_SOURCE, 1, true, 6);
-    expect(bestOptions.length).toBe(1);
-    expect(bestOptions[0].option.id_sub).toBe('A1.1');
-    expect(bestOptions[0].difference_area).toBe(0);
-    expect(bestOptions[0].difference_energy).toBe(-1083);
+  describe('Filter by ENERGY: ', () => {
+    it('should find best options with EXACT or MORE than required, when needed_energy provided', () => {
+      const needed_area_m2 = undefined;
+      const needed_energy = [5000, 1100, 2000, 4000, 1400, 1500, 1083, 1443];
+
+      needed_energy.forEach((_needed_energy) => {
+        const bestOptions = service.findBestOptions(DATA_SOURCE, 30, needed_area_m2, _needed_energy);
+        expect(bestOptions.every((x) => x.difference_energy! >= 0)).toBeTrue();
+      });
+    });
+
+    it('should NOT find any options with less than required, when needed_energy provided', () => {
+      const needed_area_m2 = undefined;
+      const needed_energy = [5000, 1100, 2000, 4000, 1400, 1500, 1083, 1443];
+
+      needed_energy.forEach((_needed_energy) => {
+        const bestOptions = service.findBestOptions(DATA_SOURCE, 30, needed_area_m2, _needed_energy);
+        bestOptions.forEach((x) => expect(x.difference_energy).not.toBeLessThan(0));
+      });
+    });
   });
 
-  it('should find best options when both needed_energy and needed_area_m2 are provided', () => {
-    const bestOptions = service.findBestOptions(DATA_SOURCE, 2, true, 6, 1100);
-    expect(bestOptions.length).toBe(1);
-    expect(bestOptions[0].option.id_sub).toBe('A1.1');
-    expect(bestOptions[0].difference_area).toBe(0);
-    expect(bestOptions[0].difference_energy).toBe(17);
+  describe('Filter by Both Energy and Area on same time: ', () => {
+    it('should find best options with exact or more ENERGY and exact or lessAREA', () => {
+      const needed_area_m2 = [12, 11, 20, 30, 40, 5, 18, 100, 40];
+      const needed_energy = [5000, 1100, 2000, 4000, 1400, 1500, 1083, 1443];
+
+      needed_area_m2.forEach((_needed_area_m2) => {
+        needed_energy.forEach((_needed_energy) => {
+          const bestOptions = service.findBestOptions(DATA_SOURCE, 30, _needed_area_m2, _needed_energy);
+          bestOptions.forEach((opt) => {
+            expect(opt.difference_energy)
+              .withContext(`area: ${_needed_area_m2}, energy: ${_needed_energy} (difference_energy)`)
+              .toBeGreaterThanOrEqual(0);
+
+            expect(opt.difference_area)
+              .withContext(`area: ${_needed_area_m2}, energy: ${_needed_energy} (difference_area)`)
+              .toBeLessThanOrEqual(0);
+          });
+        });
+      });
+    });
   });
 });
