@@ -38,20 +38,18 @@
   </button>
 </form>
 
-<div class="extra-actions">
+<div class="extra-actions" *ngIf="dataSource.data.length > 0">
   <button mat-raised-button
           color="accent"
-          *ngIf="dataSource.data.length > 0"
           (click)="sortByHighestEnergyLessWeight()">Sort by Highest Energy and Less Weight
   </button>
   <button mat-raised-button
           color="accent"
-          *ngIf="dataSource.data.length > 0"
           (click)="sortByHighestEnergyLessWeight('weight')">Sort by Less Weight and Highest Energy
   </button>
 </div>
 
-<div [ngStyle]="{ margin: '0 24px' }">
+<div [ngStyle]="{ margin: '0 24px' }" *ngIf="dataSource.data.length > 0">
   <h3>Best structural systems dimension, weight and power calculations
     ( <b>{{ dataSource.data.length }}</b> Options available): </h3>
 
@@ -111,8 +109,9 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+  <div *ngIf="dataSource.data.length === 0" class="no-data">
+    No options found.
+  </div>
 </div>
 
-<div *ngIf="dataSource.data.length === 0" class="no-data">
-  No options found.
-</div>
+

@@ -22,6 +22,9 @@ mat-form-field {
 }
 
 .input-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 16px;
 }
 
