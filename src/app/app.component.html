@@ -49,7 +49,7 @@
   </button>
 </div>
 
-<div [ngStyle]="{ margin: '0 24px' }" *ngIf="dataSource.data.length > 0">
+<div [ngStyle]="{ margin: '0 24px' }" [hidden]="dataSource.data.length === 0">
   <h3>Best structural systems dimension, weight and power calculations
     ( <b>{{ dataSource.data.length }}</b> Options available): </h3>
 
