@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, inject, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -10,6 +10,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { BestOption, Priority } from './types';
 import { BestOptionService } from './best-option.service';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +18,19 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
   imports: [RouterOutlet, CommonModule, MatInputModule, MatButtonModule, MatTableModule, MatSortModule, FormsModule, MatCheckbox],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  animations: [
+    trigger('changeHeight', [
+      state('original', style({ height: '100vh' })),
+      state('small', style({ height: '200px' })),
+      transition('original => small', [animate('350ms ease-in-out')]),
+    ]),
+    trigger('buttonLeave', [transition(':leave', [animate('350ms ease-out', style({ opacity: 0 }))])]),
+  ],
 })
 export class AppComponent implements AfterViewInit {
   bestOptionService = inject(BestOptionService);
+
+  currentHeaderState = 'original';
 
   @ViewChild(MatSort, { static: true }) matSort!: MatSort;
   dataSource = new MatTableDataSource(new Array<BestOption>());
@@ -42,6 +53,16 @@ export class AppComponent implements AfterViewInit {
   needed_area_m2?: number;
   needed_energy?: number;
   numOfAlternatives = 3;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollPosition =
+      window.scrollY || (document.documentElement || document.body.parentNode || document.body).scrollTop || 0;
+
+    if (scrollPosition > 0 && this.currentHeaderState === 'original') {
+      this.currentHeaderState = 'small';
+    }
+  }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.matSort;
@@ -76,6 +97,8 @@ export class AppComponent implements AfterViewInit {
     if (this.dataSource.data.length > 0 && !this.dataSource.sort?.active) {
       this.dataSource.sort?.sort({ id: 'weight', start: 'asc', disableClear: true });
     }
+
+    this.currentHeaderState = 'small';
   }
 
   clearSort() {

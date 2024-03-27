@@ -1,10 +1,17 @@
-<div class="top-banner">
-  <div>
-    <h1 class="header">Decision Support System</h1>
-    <h2 class="sub-header">
-      Selecting the Optimum Structure System <br>
-      of Solar Energy based on Value Engineering Concept
-    </h2>
+<div class="top-banner" [@changeHeight]="currentHeaderState">
+  <div class="top-banner__text-wrapper">
+    <div class="overlay">
+      <h1 class="header">Decision Support System</h1>
+      <h2 class="sub-header">
+        Selecting the Optimum Structure System <br>
+        of Solar Energy based on Value Engineering Concept
+      </h2>
+      <button *ngIf="currentHeaderState==='original'"
+              mat-raised-button color="accent"
+              @buttonLeave
+              (click)="currentHeaderState='small'">Start!
+      </button>
+    </div>
   </div>
 </div>
 
