@@ -15,28 +15,28 @@
   </div>
 </div>
 
-<div class="input-form">
+<form (ngSubmit)="onFindBestOptions()" class="input-form">
   <mat-form-field>
     <mat-label>Area (m^2)</mat-label>
-    <input matInput type="number" placeholder="Area (m^2)" [(ngModel)]="needed_area_m2">
+    <input matInput type="number" placeholder="Area (m^2)" name="needed_area_m2" [(ngModel)]="needed_area_m2">
     <mat-hint class="hint">Exact match or less Area.</mat-hint>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Energy (kWh)</mat-label>
-    <input matInput type="number" placeholder="Energy (kWh)" [(ngModel)]="needed_energy">
+    <input matInput type="number" placeholder="Energy (kWh)" name="needed_energy" [(ngModel)]="needed_energy">
     <mat-hint class="hint">Exact match or more energy.</mat-hint>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Number of Alternatives</mat-label>
-    <input matInput type="number" placeholder="Number of Alternatives" [(ngModel)]="numOfAlternatives">
+    <input matInput type="number" placeholder="Number of Alternatives" name="numOfAlternatives"
+           [(ngModel)]="numOfAlternatives">
   </mat-form-field>
 
   <button mat-raised-button
           color="primary"
-          [disabled]="!needed_area_m2 && !needed_energy"
-          (click)="onFindBestOptions()">Find Best Options
+          [disabled]="!needed_area_m2 && !needed_energy">Find Best Options
   </button>
-</div>
+</form>
 
 <div class="extra-actions">
   <button mat-raised-button
@@ -113,6 +113,6 @@
   </table>
 </div>
 
-<div *ngIf="dataSource.data.length === 0" [ngStyle]="{ margin: '24px' }">
+<div *ngIf="dataSource.data.length === 0" class="no-data">
   No options found.
 </div>
