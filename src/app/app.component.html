@@ -11,6 +11,7 @@
               @buttonLeave
               (click)="currentHeaderState='small'">Start!
       </button>
+      <div class="overlay__footer">tststststsstst</div>
     </div>
   </div>
 </div>
@@ -34,18 +35,18 @@
 
   <button mat-raised-button
           color="primary"
-          [disabled]="!needed_area_m2 && !needed_energy">Find Best Options
+          [disabled]="!needed_area_m2 && !needed_energy">Find Best Alternatives
   </button>
 </form>
 
 <div class="extra-actions" *ngIf="dataSource.data.length > 0">
   <button mat-raised-button
           color="accent"
-          (click)="sortByHighestEnergyLessWeight()">Sort by Highest Energy and Less Weight
+          (click)="sortAllBestOptionsAndSetDatasourceWithNumOfAlternatives()">Sort by Highest Energy
   </button>
   <button mat-raised-button
           color="accent"
-          (click)="sortByHighestEnergyLessWeight('weight')">Sort by Less Weight and Highest Energy
+          (click)="sortAllBestOptionsAndSetDatasourceWithNumOfAlternatives('weight')">Sort by Less Weight
   </button>
 </div>
 
@@ -79,7 +80,7 @@
       <td mat-cell *matCellDef="let element">{{ element.option.dimension_y }}</td>
     </ng-container>
     <ng-container matColumnDef="area_m2">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Area (m^2)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Area (m2)</th>
       <td mat-cell *matCellDef="let element">{{ element.option.area_m2 }}</td>
     </ng-container>
     <ng-container matColumnDef="weight">
@@ -98,20 +99,28 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Qty. Structure System</th>
       <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
     </ng-container>
+    <ng-container matColumnDef="totalArea">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Area</th>
+      <td mat-cell *matCellDef="let element">{{ element.totalArea }}</td>
+    </ng-container>
+    <ng-container matColumnDef="totalEnergy">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Energy</th>
+      <td mat-cell *matCellDef="let element">{{ element.totalEnergy }}</td>
+    </ng-container>
     <ng-container matColumnDef="difference_area">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Difference Area (m^2)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Difference Area(m2)</th>
       <td mat-cell *matCellDef="let element">{{ element.difference_area ?? '--' }}</td>
     </ng-container>
     <ng-container matColumnDef="difference_energy">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Difference Energy (kWh)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Difference Energy(kWh)</th>
       <td mat-cell *matCellDef="let element">{{ element.difference_energy ?? '--' }}</td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <div *ngIf="dataSource.data.length === 0" class="no-data">
-    No options found.
-  </div>
 </div>
 
+<div *ngIf="dataSource.data.length === 0" class="no-data">
+  No options found.
+</div>
 

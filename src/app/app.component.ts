@@ -47,12 +47,15 @@ export class AppComponent implements AfterViewInit {
     'no_solar_panel',
     'energy',
     'quantity',
+    'totalArea',
+    'totalEnergy',
     'difference_area',
     'difference_energy',
   ];
   needed_area_m2?: number;
   needed_energy?: number;
   numOfAlternatives = 3;
+  allBestOptions = new Array<BestOption>();
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -87,13 +90,12 @@ export class AppComponent implements AfterViewInit {
   }
 
   onFindBestOptions() {
-    this.dataSource.data = this.bestOptionService.findBestOptions(
-      [...DATA_SOURCE],
-      this.numOfAlternatives,
-      this.needed_area_m2,
-      this.needed_energy
-    );
+    this.allBestOptions = this.bestOptionService.findBestOptions([...DATA_SOURCE], this.needed_area_m2, this.needed_energy);
+    this.dataSource.data = this.allBestOptions.slice(0, this.numOfAlternatives);
 
+    this.sortAllBestOptionsAndSetDatasourceWithNumOfAlternatives('weight');
+
+    // apply default sorting on the mat-table with only numOfAlternatives datasource
     if (this.dataSource.data.length > 0 && !this.dataSource.sort?.active) {
       this.dataSource.sort?.sort({ id: 'weight', start: 'asc', disableClear: true });
     }
@@ -105,10 +107,10 @@ export class AppComponent implements AfterViewInit {
     this.matSort.sort({ id: '', start: 'asc', disableClear: false });
   }
 
-  sortByHighestEnergyLessWeight(priority: Priority = 'energy') {
+  sortAllBestOptionsAndSetDatasourceWithNumOfAlternatives(priority: Priority = 'energy') {
     this.clearSort();
 
-    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
+    const sortedAllBestOptions = this.allBestOptions.sort((a, b) => {
       if (priority === 'weight') {
         // First, sort by less weight (ascending order)
         if (a.option.weight !== b.option.weight) {
@@ -131,5 +133,7 @@ export class AppComponent implements AfterViewInit {
         return a.option.weight - b.option.weight;
       }
     });
+
+    this.dataSource.data = sortedAllBestOptions.slice(0, this.numOfAlternatives);
   }
 }

@@ -1,7 +1,14 @@
 .mat-column-quantity,
+.mat-column-totalArea,
+.mat-column-totalEnergy {
+  color: darkblue;
+  text-align: center;
+}
+
 .mat-column-difference_area,
 .mat-column-difference_energy {
-  color: darkblue;
+  color: #a11919;
+  text-align: center;
 }
 
 .mat-column-energy {
@@ -29,6 +36,10 @@ mat-form-field {
 }
 
 .extra-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   button {
     margin: 16px;
   }
@@ -71,4 +82,11 @@ mat-form-field {
   justify-content: center;
   align-items: center;
   padding: 16px;
+}
+
+.overlay__footer {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  font-size: 16px;
 }
