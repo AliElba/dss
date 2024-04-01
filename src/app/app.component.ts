@@ -11,11 +11,22 @@ import { BestOption, Priority } from './types';
 import { BestOptionService } from './best-option.service';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, MatInputModule, MatButtonModule, MatTableModule, MatSortModule, FormsModule, MatCheckbox],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    MatInputModule,
+    MatButtonModule,
+    MatTableModule,
+    MatSortModule,
+    FormsModule,
+    MatCheckbox,
+    MatDivider,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   animations: [

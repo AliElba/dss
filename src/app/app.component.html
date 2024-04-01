@@ -40,15 +40,23 @@
 </form>
 
 <div class="extra-actions" *ngIf="dataSource.data.length > 0">
-  <button mat-raised-button
-          color="accent"
-          (click)="sortAllBestOptionsAndSetDatasourceWithNumOfAlternatives()">Sort by Highest Energy
-  </button>
-  <button mat-raised-button
-          color="accent"
-          (click)="sortAllBestOptionsAndSetDatasourceWithNumOfAlternatives('weight')">Sort by Less Weight
-  </button>
+  <div>
+    <button mat-raised-button
+            color="accent"
+            (click)="sortAllBestOptionsAndSetDatasourceWithNumOfAlternatives()">Sort by Highest Energy
+    </button>
+    <button mat-raised-button
+            color="accent"
+            (click)="sortAllBestOptionsAndSetDatasourceWithNumOfAlternatives('weight')">Sort by Less Weight
+    </button>
+  </div>
+  <mat-hint class="hint">
+    Sorting will be applied on all available alternatives,
+    not only the ones shown in the table below.
+  </mat-hint>
 </div>
+
+<mat-divider class="divider" />
 
 <div [ngStyle]="{ margin: '0 24px' }" [hidden]="dataSource.data.length === 0">
   <h3>Best structural systems dimension, weight and power calculations
@@ -92,7 +100,7 @@
       <td mat-cell *matCellDef="let element">{{ element.option.no_solar_panel }}</td>
     </ng-container>
     <ng-container matColumnDef="energy">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Energy (kWh)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Energy (kWh)</th>
       <td mat-cell *matCellDef="let element">{{ element.option.energy }}</td>
     </ng-container>
     <ng-container matColumnDef="quantity">
@@ -108,11 +116,11 @@
       <td mat-cell *matCellDef="let element">{{ element.totalEnergy }}</td>
     </ng-container>
     <ng-container matColumnDef="difference_area">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Difference Area(m2)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Remaining Area(m2)</th>
       <td mat-cell *matCellDef="let element">{{ element.difference_area ?? '--' }}</td>
     </ng-container>
     <ng-container matColumnDef="difference_energy">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Difference Energy(kWh)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Extra Energy(kWh)</th>
       <td mat-cell *matCellDef="let element">{{ element.difference_energy ?? '--' }}</td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
